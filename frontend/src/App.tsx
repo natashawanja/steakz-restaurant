@@ -1,3 +1,4 @@
+import AdminPage from './pages/AdminPage'
 import HomePage from './pages/HomePage'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
@@ -15,7 +16,7 @@ export default function App() {
 
           <Route path="/admin" element={
             <ProtectedRoute allowedRoles={['ADMIN']}>
-              <div className="p-8 text-2xl font-bold">Admin Dashboard — coming soon</div>
+              <AdminPage />
             </ProtectedRoute>
           } />
 
