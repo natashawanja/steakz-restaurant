@@ -30,5 +30,23 @@ export async function seedDatabase() {
   ])
 
   console.log('✅ 6 users created')
+
+  // Create tables for London branch
+  const tableCount = await prisma.table.count({ where: { branchId: 'london' } })
+  if (tableCount === 0) {
+    await Promise.all(
+      Array.from({ length: 10 }, (_, i) =>
+        prisma.table.create({
+          data: {
+            number: i + 1,
+            seats: i % 3 === 0 ? 2 : i % 3 === 1 ? 4 : 6,
+            branchId: 'london'
+          }
+        })
+      )
+    )
+    console.log('✅ 10 tables created for London branch')
+  }
+
   console.log('✅ Seed complete!')
 }

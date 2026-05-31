@@ -1,3 +1,4 @@
+import WaiterPage from './pages/WaiterPage'
 import ChefPage from './pages/ChefPage'
 import HMPage from './pages/HMPage'
 import AdminPage from './pages/AdminPage'
@@ -48,7 +49,7 @@ export default function App() {
 
           <Route path="/waiter" element={
             <ProtectedRoute allowedRoles={['WAITER']}>
-              <div className="p-8 text-2xl font-bold">Waiter Floor — coming soon</div>
+              <WaiterPage />
             </ProtectedRoute>
           } />
 
