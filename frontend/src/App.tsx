@@ -1,3 +1,4 @@
+import HMPage from './pages/HMPage'
 import AdminPage from './pages/AdminPage'
 import HomePage from './pages/HomePage'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
@@ -22,7 +23,7 @@ export default function App() {
 
           <Route path="/hm" element={
             <ProtectedRoute allowedRoles={['HM']}>
-              <div className="p-8 text-2xl font-bold">HQ Manager Dashboard — coming soon</div>
+              <HMPage />
             </ProtectedRoute>
           } />
 
