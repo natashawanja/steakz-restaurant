@@ -1,3 +1,4 @@
+import ChefPage from './pages/ChefPage'
 import HMPage from './pages/HMPage'
 import AdminPage from './pages/AdminPage'
 import HomePage from './pages/HomePage'
@@ -11,7 +12,7 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-        <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
 
@@ -35,7 +36,7 @@ export default function App() {
 
           <Route path="/chef" element={
             <ProtectedRoute allowedRoles={['CHEF']}>
-              <div className="p-8 text-2xl font-bold">Chef Kitchen — coming soon</div>
+              <ChefPage />
             </ProtectedRoute>
           } />
 
