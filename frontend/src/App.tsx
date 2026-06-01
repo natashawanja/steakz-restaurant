@@ -1,3 +1,4 @@
+import BMPage from './pages/BMPage'
 import CashierPage from './pages/CashierPage'
 import WaiterPage from './pages/WaiterPage'
 import ChefPage from './pages/ChefPage'
@@ -32,7 +33,7 @@ export default function App() {
 
           <Route path="/bm" element={
             <ProtectedRoute allowedRoles={['BM']}>
-              <div className="p-8 text-2xl font-bold">Branch Manager Dashboard — coming soon</div>
+              <BMPage />
             </ProtectedRoute>
           } />
 
