@@ -1,3 +1,4 @@
+import CashierPage from './pages/CashierPage'
 import WaiterPage from './pages/WaiterPage'
 import ChefPage from './pages/ChefPage'
 import HMPage from './pages/HMPage'
@@ -43,7 +44,7 @@ export default function App() {
 
           <Route path="/cashier" element={
             <ProtectedRoute allowedRoles={['CASHIER']}>
-              <div className="p-8 text-2xl font-bold">Cashier Terminal — coming soon</div>
+              <CashierPage />
             </ProtectedRoute>
           } />
 
