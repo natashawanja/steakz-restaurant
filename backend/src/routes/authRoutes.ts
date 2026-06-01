@@ -17,7 +17,10 @@ router.post('/login', async (req: Request, res: Response) => {
     return
   }
 
-  const user = await prisma.user.findUnique({ where: { email } })
+  const user = await prisma.user.findUnique({
+    where: { email },
+    include: { branch: true }
+  })
 
   if (!user || !user.isActive) {
     res.status(401).json({ error: 'Invalid credentials.' })
@@ -32,7 +35,13 @@ router.post('/login', async (req: Request, res: Response) => {
   }
 
   const token = jwt.sign(
-    { id: user.id, role: user.role, branchId: user.branchId },
+    {
+      id: user.id,
+      role: user.role,
+      branchId: user.branchId,
+      branchName: user.branch?.name ?? null,
+      branchIsMain: user.branch?.isMain ?? false
+    },
     JWT_SECRET,
     { expiresIn: '7d' }
   )
@@ -43,7 +52,9 @@ router.post('/login', async (req: Request, res: Response) => {
       id: user.id,
       name: user.name,
       role: user.role,
-      branchId: user.branchId
+      branchId: user.branchId,
+      branchName: user.branch?.name ?? null,
+      branchIsMain: user.branch?.isMain ?? false
     }
   })
 })
@@ -57,10 +68,17 @@ router.get('/me', verifyToken, async (req: Request, res: Response) => {
       name: true,
       email: true,
       role: true,
-      branchId: true
+      branchId: true,
+      branch: {
+        select: { name: true, isMain: true }
+      }
     }
   })
-  res.json(user)
+  res.json({
+    ...user,
+    branchName: (user as any)?.branch?.name ?? null,
+    branchIsMain: (user as any)?.branch?.isMain ?? false
+  })
 })
 
 export default router

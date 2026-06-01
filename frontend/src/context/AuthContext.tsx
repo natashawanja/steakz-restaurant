@@ -6,6 +6,8 @@ interface AuthUser {
   name: string
   role: string
   branchId: string | null
+  branchName: string | null
+  branchIsMain: boolean
 }
 
 interface AuthContextType {

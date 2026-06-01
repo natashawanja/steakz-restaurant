@@ -6,7 +6,11 @@ export async function seedDatabase() {
 
   // Create 7 branches
   const branches = await Promise.all([
-    prisma.branch.upsert({ where: { id: 'london' }, update: {}, create: { id: 'london', name: 'London Flagship', address: '1 Oxford St', city: 'London' } }),
+    prisma.branch.upsert({
+      where: { id: 'london' },
+      update: { isMain: true },
+      create: { id: 'london', name: 'London Flagship', address: '1 Oxford St', city: 'London', isMain: true }
+    }),
     prisma.branch.upsert({ where: { id: 'manchester' }, update: {}, create: { id: 'manchester', name: 'Manchester', address: '5 Deansgate', city: 'Manchester' } }),
     prisma.branch.upsert({ where: { id: 'birmingham' }, update: {}, create: { id: 'birmingham', name: 'Birmingham', address: '10 Broad St', city: 'Birmingham' } }),
     prisma.branch.upsert({ where: { id: 'leeds' }, update: {}, create: { id: 'leeds', name: 'Leeds', address: '3 The Headrow', city: 'Leeds' } }),
