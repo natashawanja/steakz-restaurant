@@ -79,7 +79,7 @@ export default function HomePage() {
 
       {/* Navbar */}
       <nav className="bg-charcoal text-white px-8 py-4 flex justify-between items-center sticky top-0 z-50">
-        <h1 className="font-display text-2xl font-bold text-brass">STEAKZ</h1>
+        <h1 className="font-display text-2xl font-bold text-brass">STEAKZ🍲</h1>
         <div className="flex items-center gap-6 text-sm">
           <a href="#menu" className="hover:text-brass transition">Menu</a>
           <a href="#branches" className="hover:text-brass transition">Branches</a>
