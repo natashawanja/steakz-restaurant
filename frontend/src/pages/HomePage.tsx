@@ -1,4 +1,3 @@
-import TopBar from '../components/TopBar'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../api/axios'
@@ -78,6 +77,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#F9F9F7]">
 
+      {/* Navbar */}
       <nav className="bg-charcoal text-white px-8 py-4 flex justify-between items-center sticky top-0 z-50">
         <h1 className="font-display text-2xl font-bold text-brass">STEAKZ</h1>
         <div className="flex items-center gap-6 text-sm">
@@ -94,56 +94,72 @@ export default function HomePage() {
         </div>
       </nav>
 
-      <div className="bg-charcoal text-white text-center py-28 px-8">
-        <p className="text-brass text-sm font-medium uppercase tracking-widest mb-4">
-          Fine Dining · Est. 2010
-        </p>
-        <h2 className="font-display text-6xl font-bold text-white mb-6">
-          Culinary Excellence
-        </h2>
-        <p className="text-gray-300 text-lg max-w-xl mx-auto mb-10">
-          Premium steaks, exceptional service, unforgettable experiences
-          across all our UK branches.
-        </p>
-        <div className="flex gap-4 justify-center">
-          <a
-            href="#menu"
-            className="bg-brass text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition inline-block"
-          >
-            View Our Menu
-          </a>
-          <a
-            href="#branches"
-            className="border border-white/30 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition inline-block"
-          >
-            Find a Branch
-          </a>
+      {/* Hero with background image */}
+      <div
+        className="text-white text-center py-28 px-8 relative"
+        style={{
+          backgroundImage: 'url("/steak.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="relative z-10">
+          <p className="text-brass text-sm font-medium uppercase tracking-widest mb-4">
+            Fine Dining · Est. 2010
+          </p>
+          <h2 className="font-display text-6xl font-bold text-white mb-6">
+            Culinary Excellence
+          </h2>
+          <p className="text-gray-300 text-lg max-w-xl mx-auto mb-10">
+            Premium steaks, exceptional service, unforgettable experiences
+            across all our UK branches.
+          </p>
+          <div className="flex gap-4 justify-center">
+            <a
+              href="#menu"
+              className="bg-brass text-white px-8 py-4 rounded-lg font-semibold text-lg hover:opacity-90 transition inline-block"
+            >
+              View Our Menu
+            </a>
+            <a
+              href="#branches"
+              className="border border-white/30 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition inline-block"
+            >
+              Find a Branch
+            </a>
+          </div>
         </div>
       </div>
 
-      {promotions.length > 0 && (
-        <div id="offers" className="bg-brass text-white py-10 px-8">
-          <div className="max-w-5xl mx-auto">
-            <h3 className="font-display text-2xl font-bold mb-6 text-center">
-              Current Offers
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {promotions.map(p => (
-                <div key={p.id} className="bg-white/20 rounded-xl p-5 text-center">
-                  <p className="font-bold text-3xl mb-1">{p.discount}% OFF</p>
-                  <p className="text-sm opacity-90">
-                    Use code:{' '}
-                    <span className="font-mono font-bold bg-white/20 px-2 py-0.5 rounded">
-                      {p.code}
-                    </span>
-                  </p>
-                </div>
-              ))}
+      {/* Promotions */}
+      {
+        promotions.length > 0 && (
+          <div id="offers" className="bg-brass text-white py-10 px-8">
+            <div className="max-w-5xl mx-auto">
+              <h3 className="font-display text-2xl font-bold mb-6 text-center">
+                Current Offers
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {promotions.map(p => (
+                  <div key={p.id} className="bg-white/20 rounded-xl p-5 text-center">
+                    <p className="font-bold text-3xl mb-1">{p.discount}% OFF</p>
+                    <p className="text-sm opacity-90">
+                      Use code:{' '}
+                      <span className="font-mono font-bold bg-white/20 px-2 py-0.5 rounded">
+                        {p.code}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
+      {/* Menu */}
       <div id="menu" className="max-w-5xl mx-auto py-20 px-8">
         <div className="text-center mb-10">
           <p className="text-brass text-sm font-medium uppercase tracking-widest mb-2">
@@ -154,6 +170,7 @@ export default function HomePage() {
           </h3>
         </div>
 
+        {/* Branch filter */}
         <div className="flex justify-center mb-10">
           <div className="flex gap-2 flex-wrap justify-center">
             <button
@@ -232,6 +249,7 @@ export default function HomePage() {
         )}
       </div>
 
+      {/* Branches */}
       <div id="branches" className="bg-charcoal text-white py-20 px-8">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-10">
@@ -261,6 +279,7 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Contact */}
       <div id="contact" className="bg-[#F9F9F7] py-20 px-8">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-brass text-sm font-medium uppercase tracking-widest mb-2">
@@ -293,6 +312,7 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Footer */}
       <div className="bg-charcoal border-t border-white/10 py-8 px-8">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
           <h1 className="font-display text-xl font-bold text-brass">STEAKZ</h1>
@@ -306,6 +326,6 @@ export default function HomePage() {
         </div>
       </div>
 
-    </div>
+    </div >
   )
 }
