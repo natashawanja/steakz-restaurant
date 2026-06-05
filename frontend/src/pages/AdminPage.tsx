@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
-import { useNavigate } from 'react-router-dom'
 import api from '../api/axios'
 import TopBar from '../components/TopBar'
 
@@ -25,7 +24,6 @@ interface Branch {
 
 export default function AdminPage() {
   const { user } = useAuth()
-  const navigate = useNavigate()
   const [users, setUsers] = useState<User[]>([])
   const [branches, setBranches] = useState<Branch[]>([])
   const [activeTab, setActiveTab] = useState<'users' | 'branches'>('users')
@@ -102,6 +100,9 @@ export default function AdminPage() {
     WAITER: 'bg-gray-100 text-gray-700',
   }
 
+  // Only these roles can be created or changed to
+  const allowedRoles = ['BM', 'CHEF', 'CASHIER', 'WAITER']
+
   return (
     <div className="min-h-screen bg-[#F0F2F5]">
       <div className="fixed left-0 top-0 h-full w-56 bg-charcoal text-white flex flex-col p-6">
@@ -156,22 +157,58 @@ export default function AdminPage() {
               <div className="bg-white rounded-xl p-6 mb-6 border border-gray-100">
                 <h3 className="font-semibold mb-4">Create New User</h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <input placeholder="Full name" value={newName} onChange={e => setNewName(e.target.value)} className="border rounded-lg px-3 py-2 text-sm" />
-                  <input placeholder="Email" value={newEmail} onChange={e => setNewEmail(e.target.value)} className="border rounded-lg px-3 py-2 text-sm" />
-                  <input placeholder="Password" type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="border rounded-lg px-3 py-2 text-sm" />
-                  <select value={newRole} onChange={e => setNewRole(e.target.value)} className="border rounded-lg px-3 py-2 text-sm">
-                    {['ADMIN', 'HM', 'BM', 'CHEF', 'CASHIER', 'WAITER'].map(r => (
+                  <input
+                    placeholder="Full name"
+                    value={newName}
+                    onChange={e => setNewName(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  />
+                  <input
+                    placeholder="Email"
+                    value={newEmail}
+                    onChange={e => setNewEmail(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  />
+                  <input
+                    placeholder="Password"
+                    type="password"
+                    value={newPassword}
+                    onChange={e => setNewPassword(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  />
+                  <select
+                    value={newRole}
+                    onChange={e => setNewRole(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  >
+                    {allowedRoles.map(r => (
                       <option key={r} value={r}>{r}</option>
                     ))}
                   </select>
-                  <select value={newBranchId} onChange={e => setNewBranchId(e.target.value)} className="border rounded-lg px-3 py-2 text-sm">
-                    <option value="">No branch (Admin/HM)</option>
-                    {branches.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+                  <select
+                    value={newBranchId}
+                    onChange={e => setNewBranchId(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  >
+                    <option value="">Select a branch</option>
+                    {branches.map(b => (
+                      <option key={b.id} value={b.id}>{b.name} — {b.city}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="flex gap-3 mt-4">
-                  <button onClick={createUser} className="bg-brass text-white px-4 py-2 rounded-lg text-sm font-medium">Create User</button>
-                  <button onClick={() => setShowAddUser(false)} className="border px-4 py-2 rounded-lg text-sm">Cancel</button>
+                  <button
+                    onClick={createUser}
+                    className="bg-brass text-white px-4 py-2 rounded-lg text-sm font-medium"
+                  >
+                    Create User
+                  </button>
+                  <button
+                    onClick={() => setShowAddUser(false)}
+                    className="border px-4 py-2 rounded-lg text-sm"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             )}
@@ -194,15 +231,23 @@ export default function AdminPage() {
                       <td className="px-6 py-4 font-medium">{u.name}</td>
                       <td className="px-6 py-4 text-gray-500">{u.email}</td>
                       <td className="px-6 py-4">
-                        <select
-                          value={u.role}
-                          onChange={e => changeRole(u.id, e.target.value)}
-                          className={'text-xs font-medium px-2 py-1 rounded-full border-0 ' + roleColors[u.role]}
-                        >
-                          {['ADMIN', 'HM', 'BM', 'CHEF', 'CASHIER', 'WAITER'].map(r => (
-                            <option key={r} value={r}>{r}</option>
-                          ))}
-                        </select>
+                        {u.role === 'ADMIN' || u.role === 'HM' ? (
+                          // ADMIN and HM roles are shown as a badge only — cannot be changed
+                          <span className={'text-xs font-medium px-2 py-1 rounded-full ' + roleColors[u.role]}>
+                            {u.role}
+                          </span>
+                        ) : (
+                          // All other roles can be changed but only within allowed roles
+                          <select
+                            value={u.role}
+                            onChange={e => changeRole(u.id, e.target.value)}
+                            className={'text-xs font-medium px-2 py-1 rounded-full border-0 ' + roleColors[u.role]}
+                          >
+                            {allowedRoles.map(r => (
+                              <option key={r} value={r}>{r}</option>
+                            ))}
+                          </select>
+                        )}
                       </td>
                       <td className="px-6 py-4 text-gray-500">{u.branch?.name || '—'}</td>
                       <td className="px-6 py-4">
@@ -211,12 +256,17 @@ export default function AdminPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <button
-                          onClick={() => toggleUser(u.id, u.isActive)}
-                          className={'text-xs font-medium px-3 py-1 rounded-lg ' + (u.isActive ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100')}
-                        >
-                          {u.isActive ? 'Deactivate' : 'Activate'}
-                        </button>
+                        {/* Prevent deactivating Admin or HM */}
+                        {u.role === 'ADMIN' || u.role === 'HM' ? (
+                          <span className="text-xs text-gray-300">Protected</span>
+                        ) : (
+                          <button
+                            onClick={() => toggleUser(u.id, u.isActive)}
+                            className={'text-xs font-medium px-3 py-1 rounded-lg ' + (u.isActive ? 'bg-red-50 text-red-600 hover:bg-red-100' : 'bg-green-50 text-green-600 hover:bg-green-100')}
+                          >
+                            {u.isActive ? 'Deactivate' : 'Activate'}
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -245,13 +295,38 @@ export default function AdminPage() {
               <div className="bg-white rounded-xl p-6 mb-6 border border-gray-100">
                 <h3 className="font-semibold mb-4">Create New Branch</h3>
                 <div className="grid grid-cols-3 gap-4">
-                  <input placeholder="Branch name" value={branchName} onChange={e => setBranchName(e.target.value)} className="border rounded-lg px-3 py-2 text-sm" />
-                  <input placeholder="Address" value={branchAddress} onChange={e => setBranchAddress(e.target.value)} className="border rounded-lg px-3 py-2 text-sm" />
-                  <input placeholder="City" value={branchCity} onChange={e => setBranchCity(e.target.value)} className="border rounded-lg px-3 py-2 text-sm" />
+                  <input
+                    placeholder="Branch name"
+                    value={branchName}
+                    onChange={e => setBranchName(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  />
+                  <input
+                    placeholder="Address"
+                    value={branchAddress}
+                    onChange={e => setBranchAddress(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  />
+                  <input
+                    placeholder="City"
+                    value={branchCity}
+                    onChange={e => setBranchCity(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                  />
                 </div>
                 <div className="flex gap-3 mt-4">
-                  <button onClick={createBranch} className="bg-brass text-white px-4 py-2 rounded-lg text-sm font-medium">Create Branch</button>
-                  <button onClick={() => setShowAddBranch(false)} className="border px-4 py-2 rounded-lg text-sm">Cancel</button>
+                  <button
+                    onClick={createBranch}
+                    className="bg-brass text-white px-4 py-2 rounded-lg text-sm font-medium"
+                  >
+                    Create Branch
+                  </button>
+                  <button
+                    onClick={() => setShowAddBranch(false)}
+                    className="border px-4 py-2 rounded-lg text-sm"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             )}
